@@ -19,21 +19,24 @@ Utilities for working with databases.
 from contextlib import contextmanager
 from six.moves import zip
 
-from psycopg2.errorcodes import (
-    FOREIGN_KEY_VIOLATION,
-    UNIQUE_VIOLATION,
-)
+# from psycopg2.errorcodes import (
+#     FOREIGN_KEY_VIOLATION,
+#     UNIQUE_VIOLATION,
+# )
 from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.elements import Cast
 
 
 def is_unique_violation(error):
-    return error.orig.pgcode == UNIQUE_VIOLATION
+    # return error.orig.args[0] == UNIQUE_VIOLATION
+    return error.orig.args[0] == 1062
 
 
 def is_foreign_key_violation(error):
-    return error.orig.pgcode == FOREIGN_KEY_VIOLATION
+    import ipdb; ipdb.set_trace()
+    return False
+    # return error.orig.pgcode == FOREIGN_KEY_VIOLATION
 
 
 @contextmanager

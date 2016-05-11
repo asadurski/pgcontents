@@ -10,6 +10,7 @@ from sqlalchemy import (
     func,
     null,
     select,
+    text,
     Unicode,
 )
 
@@ -615,16 +616,33 @@ def get_remote_checkpoint(db, user_id, api_path, checkpoint_id):
 
 
 def save_remote_checkpoint(db, user_id, api_path, content):
+    return save_remote_checkpoint_mysql(db, user_id, api_path, content)
+    # return_fields = _remote_checkpoint_default_fields()
+    # result = db.execute(
+    #     remote_checkpoints.insert().values(
+    #         user_id=user_id,
+    #         path=from_api_filename(api_path),
+    #         content=content,
+    #     ).returning(
+    #         *return_fields
+    #     ),
+    # ).first()
+
+    # return to_dict(return_fields, result)
+
+def save_remote_checkpoint_mysql(db, user_id, api_path, content):
     return_fields = _remote_checkpoint_default_fields()
     result = db.execute(
         remote_checkpoints.insert().values(
             user_id=user_id,
             path=from_api_filename(api_path),
             content=content,
-        ).returning(
-            *return_fields
-        ),
-    ).first()
+        )
+    )
+
+    stmt = select(_remote_checkpoint_default_fields()).\
+           where(remote_checkpoints.c.id==text('LAST_INSERT_ID()'))
+    result = db.execute(stmt).fetchone()
 
     return to_dict(return_fields, result)
 
