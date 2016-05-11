@@ -30,7 +30,8 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 
-metadata = MetaData(schema='pgcontents')
+# metadata = MetaData(schema='pgcontents')
+metadata = MetaData()
 
 # Shared Types
 UserID = Unicode(30)
@@ -75,45 +76,45 @@ directories = Table(
     ForeignKeyConstraint(
         ['parent_user_id', 'parent_name'],
         ['directories.user_id', 'directories.name'],
-        deferrable=True,
-        initially=u'IMMEDIATE'
+        # deferrable=True,
+        # initially=u'IMMEDIATE'
     ),
-    CheckConstraint(
-        'user_id = parent_user_id',
-        name='directories_match_user_id',
-    ),
-    # Assert that parent_name is a prefix of name.
-    CheckConstraint(
-        "position(parent_name in name) != 0",
-        name='directories_parent_name_prefix',
-    ),
-    # Assert that all directories begin or end with '/'.
-    CheckConstraint(
-        "left(name, 1) = '/'",
-        name='directories_startwith_slash',
-    ),
-    CheckConstraint(
-        "right(name, 1) = '/'",
-        name='directories_endwith_slash',
-    ),
-    # Assert that the name of this directory has one more '/' than its parent.
-    CheckConstraint(
-        "length(regexp_replace(name, '[^/]+', '', 'g')) - 1"
-        "= length(regexp_replace(parent_name, '[^/]+', '', 'g'))",
-        name='directories_slash_count',
-    ),
-    # Assert that parent_user_id is NULL iff parent_name is NULL.  This should
-    # be true only for each user's root directory.
-    CheckConstraint(
-        ''.join(
-            [
-                '(parent_name IS NULL AND parent_user_id IS NULL)'
-                ' OR ',
-                '(parent_name IS NOT NULL AND parent_user_id IS NOT NULL)'
-            ],
-        ),
-        name='directories_null_user_id_match',
-    ),
+    # CheckConstraint(
+    #     'user_id = parent_user_id',
+    #     name='directories_match_user_id',
+    # ),
+    # # Assert that parent_name is a prefix of name.
+    # CheckConstraint(
+    #     "position(parent_name in name) != 0",
+    #     name='directories_parent_name_prefix',
+    # ),
+    # # Assert that all directories begin or end with '/'.
+    # CheckConstraint(
+    #     "left(name, 1) = '/'",
+    #     name='directories_startwith_slash',
+    # ),
+    # CheckConstraint(
+    #     "right(name, 1) = '/'",
+    #     name='directories_endwith_slash',
+    # ),
+    # # Assert that the name of this directory has one more '/' than its parent.
+    # CheckConstraint(
+    #     "length(regexp_replace(name, '[^/]+', '', 'g')) - 1"
+    #     "= length(regexp_replace(parent_name, '[^/]+', '', 'g'))",
+    #     name='directories_slash_count',
+    # ),
+    # # Assert that parent_user_id is NULL iff parent_name is NULL.  This should
+    # # be true only for each user's root directory.
+    # CheckConstraint(
+    #     ''.join(
+    #         [
+    #             '(parent_name IS NULL AND parent_user_id IS NULL)'
+    #             ' OR ',
+    #             '(parent_name IS NOT NULL AND parent_user_id IS NOT NULL)'
+    #         ],
+    #     ),
+    #     name='directories_null_user_id_match',
+    # ),
 )
 
 

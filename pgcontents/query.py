@@ -10,6 +10,7 @@ from sqlalchemy import (
     func,
     null,
     select,
+    text,
     Unicode,
 )
 
@@ -661,30 +662,27 @@ def get_remote_checkpoint(db, user_id, api_path, checkpoint_id, decrypt_func):
     return to_dict_with_content(fields, result, decrypt_func)
 
 
-def save_remote_checkpoint(db,
-                           user_id,
-                           api_path,
-                           content,
-                           encrypt_func,
-                           max_size_bytes):
-    # IMPORTANT NOTE: Read the long comment at the top of
-    # ``reencrypt_user_content`` before you change this function.
-
+def save_remote_checkpoint(db, user_id, api_path, content, encrypt_func, max_size_bytes):
     content = preprocess_incoming_content(
         content,
         encrypt_func,
         max_size_bytes,
     )
+    return save_remote_checkpoint_mysql(db, user_id, api_path, content)
+
+def save_remote_checkpoint_mysql(db, user_id, api_path, content):
     return_fields = _remote_checkpoint_default_fields()
     result = db.execute(
         remote_checkpoints.insert().values(
             user_id=user_id,
             path=from_api_filename(api_path),
             content=content,
-        ).returning(
-            *return_fields
-        ),
-    ).first()
+        )
+    )
+
+    stmt = select(_remote_checkpoint_default_fields()).\
+           where(remote_checkpoints.c.id==text('LAST_INSERT_ID()'))
+    result = db.execute(stmt).fetchone()
 
     return to_dict_no_content(return_fields, result)
 
