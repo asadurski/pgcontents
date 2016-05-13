@@ -90,6 +90,7 @@ def create_directory(db, user_id, api_path):
         parent_name = name[:name.rindex('/', 0, -1) + 1]
         parent_user_id = user_id
 
+    # import pudb; pudb.set_trace()
     db.execute(
         directories.insert().values(
             name=name,
@@ -414,6 +415,7 @@ def rename_directory(db, user_id, old_api_path, new_api_path):
 
     # Set this foreign key constraint to deferred so it's not violated
     # when we run the first statement to update the name of the directory.
+    # TODO: adapt here for mysql
     db.execute('SET CONSTRAINTS '
                'pgcontents.directories_parent_user_id_fkey DEFERRED')
 
