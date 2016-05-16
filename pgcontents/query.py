@@ -466,9 +466,8 @@ def rename_directory(db, user_id, old_api_path, new_api_path):
 
     # Set this foreign key constraint to deferred so it's not violated
     # when we run the first statement to update the name of the directory.
-    # TODO: adapt here for mysql
-    db.execute('SET CONSTRAINTS '
-               'pgcontents.directories_parent_user_id_fkey DEFERRED')
+    # db.execute('SET CONSTRAINTS '
+    #            'pgcontents.directories_parent_user_id_fkey DEFERRED')
 
     # Update name column for the directory that's being renamed
     db.execute(
