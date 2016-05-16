@@ -2,6 +2,7 @@ include README.rst
 include pgcontents/alembic.ini.template
 include LICENSE
 include requirements*.txt
+recursive-include pgcontents/alembic *
 
 global-exclude *~
 global-exclude *.pyc
