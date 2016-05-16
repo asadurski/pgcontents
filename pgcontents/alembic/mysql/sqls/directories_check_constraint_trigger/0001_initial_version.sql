@@ -1,11 +1,12 @@
-DROP FUNCTION IF EXISTS _substrCount;
+-- Since msyql doesn't provide equivalent features for postgres check
+-- constraints, we can only mimic it with triggers.
+
+DROP FUNCTION IF EXISTS _substr_count;
 DROP PROCEDURE IF EXISTS _directories_check_constraints_proc;
 DROP TRIGGER IF EXISTS directories_pre_insert_trigger;
 DROP TRIGGER IF EXISTS directories_pre_update_trigger;
 
-DELIMITER $$
-
-CREATE FUNCTION _substrCount(
+CREATE FUNCTION _substr_count(
     x VARCHAR(225),
     delim VARCHAR(225)
 )
@@ -91,7 +92,7 @@ BEGIN
     --     "= length(regexp_replace(parent_name, '[^/]+', '', 'g'))",
     --     name='directories_slash_count',
     -- ),
-    ELSEIF _substrCount(name, '/') != _substrCount(parent_name, '/') + 1 THEN
+    ELSEIF _substr_count(name, '/') != _substr_count(parent_name, '/') + 1 THEN
         SET @msg = concat(
                 'Constraint directories_slash_count violated: name = "',
                 @name,
@@ -151,6 +152,3 @@ BEGIN
         NEW.parent_name
     );
 END;
-
-$$
-delimiter ;
