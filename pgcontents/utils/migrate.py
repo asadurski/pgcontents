@@ -10,11 +10,12 @@ from IPython.utils.tempdir import TemporaryDirectory
 from pgcontents.constants import (
     ALEMBIC_INI_TEMPLATE,
     ALEMBIC_DIR_LOCATION,
+    ALEMBIC_VERSION_LOCATIONS,
 )
 
 
 @contextmanager
-def temp_alembic_ini(alembic_dir_location, sqlalchemy_url):
+def temp_alembic_ini(alembic_dir_location, sqlalchemy_url, version_locations):
     """
     Temporarily write an alembic.ini file for use with alembic migration
     scripts.
@@ -26,6 +27,7 @@ def temp_alembic_ini(alembic_dir_location, sqlalchemy_url):
                 ALEMBIC_INI_TEMPLATE.format(
                     alembic_dir_location=alembic_dir_location,
                     sqlalchemy_url=sqlalchemy_url,
+                    version_locations=version_locations,
                 )
             )
         yield alembic_ini_filename
@@ -35,7 +37,7 @@ def upgrade(db_url, revision):
     """
     Upgrade the given database to revision.
     """
-    with temp_alembic_ini(ALEMBIC_DIR_LOCATION, db_url) as alembic_ini:
+    with temp_alembic_ini(ALEMBIC_DIR_LOCATION, db_url, ALEMBIC_VERSION_LOCATIONS) as alembic_ini:
         subprocess.check_call(
             ['alembic', '-c', alembic_ini, 'upgrade', revision]
         )

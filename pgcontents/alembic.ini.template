@@ -24,7 +24,7 @@ script_location = {alembic_dir_location}
 # to alembic/versions.  When using multiple version
 # directories, initial revisions must be specified with --version-path
 # version_locations = %(here)s/bar %(here)s/bat alembic/versions
-version_locations = pgcontents/alembic/mysql/versions
+version_locations = {version_locations}
 
 # the output encoding used when revision files
 # are written from script.py.mako

@@ -12,3 +12,5 @@ with open(join(dirname(__file__), 'alembic.ini.template')) as f:
 
 DB_URL_ENVVAR = 'PGCONTENTS_DB'
 UNLIMITED = 0
+
+ALEMBIC_VERSION_LOCATIONS = join(dirname(__file__), 'alembic/mysql/versions')

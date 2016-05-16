@@ -15,7 +15,7 @@ depends_on = None
 from alembic import op
 import sqlalchemy as sa
 
-from pgcontents.migrations import execute_sql_files
+from pgcontents.utils.migrations import execute_sql_files
 
 
 def upgrade():
