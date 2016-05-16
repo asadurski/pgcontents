@@ -7,6 +7,8 @@ import os
 import re
 from contextlib import contextmanager
 
+from pgcontents.constants import ALEMBIC_DIR_LOCATION
+
 
 def get_local_filepath(filename):
     """
@@ -16,8 +18,8 @@ def get_local_filepath(filename):
         alembic/mysql/sqls/
     """
     sqls_dir = os.path.normpath(os.path.join(
-        os.path.dirname(__file__),
-        'alembic/mysql/sqls'
+        ALEMBIC_DIR_LOCATION,
+        'mysql/sqls'
     ))
     path = glob.glob(os.path.join(sqls_dir, filename))
     if not path:
