@@ -8,6 +8,7 @@ import click
 
 from pgcontents.constants import (
     ALEMBIC_DIR_LOCATION,
+    ALEMBIC_VERSION_LOCATIONS,
     DB_URL_ENVVAR,
 )
 
@@ -103,7 +104,7 @@ def gen_migration(db_url):
     You probably don't need to use this unless you're doing local development
     or changing the default pgcontents schema.
     """
-    with temp_alembic_ini(ALEMBIC_DIR_LOCATION, db_url) as alembic_ini:
+    with temp_alembic_ini(ALEMBIC_DIR_LOCATION, db_url, ALEMBIC_VERSION_LOCATIONS) as alembic_ini:
         subprocess.check_call(
             ['alembic', '-c', alembic_ini, 'revision', '--autogenerate']
         )

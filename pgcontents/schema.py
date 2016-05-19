@@ -37,7 +37,12 @@ metadata = MetaData()
 UserID = Unicode(30)
 FilePath = Unicode(300)
 
-users = Table(
+def table(*a, **kw):
+    kw.setdefault('mysql_engine', 'innodb')
+    kw.setdefault('mysql_row_format', 'DYNAMIC')
+    return Table(*a, **kw)
+
+users = table(
     'users',
     metadata,
     Column('id', UserID, primary_key=True),
@@ -54,7 +59,7 @@ Having just directory_name and suffix on files doesn't work because there are
 no entities that represent just directories themselves, which means there's no
 way to determine if a directory is a child of another directory.
 """
-directories = Table(
+directories = table(
     'directories',
     metadata,
     # ======= #
@@ -118,7 +123,7 @@ directories = Table(
 )
 
 
-files = Table(
+files = table(
     'files',
     metadata,
     Column('id', Integer(), nullable=False, primary_key=True),
@@ -152,7 +157,7 @@ files = Table(
 
 
 # Alternate checkpoint table used by PostgresCheckpointsManager.
-remote_checkpoints = Table(
+remote_checkpoints = table(
     'remote_checkpoints',
     metadata,
     Column('id', Integer(), nullable=False, primary_key=True),
