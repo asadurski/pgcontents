@@ -7,8 +7,8 @@ DROP TRIGGER IF EXISTS directories_pre_insert_trigger;
 DROP TRIGGER IF EXISTS directories_pre_update_trigger;
 
 CREATE FUNCTION _substr_count(
-    x VARCHAR(225),
-    delim VARCHAR(225)
+    x VARCHAR(300),
+    delim VARCHAR(300)
 )
 RETURNS INT
 DETERMINISTIC
@@ -18,9 +18,9 @@ END;
 
 CREATE PROCEDURE _directories_check_constraints_proc(
     IN user_id VARCHAR(30),
-    IN name VARCHAR(225),
+    IN name VARCHAR(300),
     IN parent_user_id VARCHAR(30),
-    IN parent_name VARCHAR(225)
+    IN parent_name VARCHAR(300)
 )
 BEGIN
     -- Non-null versions, used in the concat() function, because concat()
