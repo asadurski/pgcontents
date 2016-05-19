@@ -58,7 +58,10 @@ class PostgresManagerMixin(HasTraits):
     engine = Instance(Engine)
 
     def _engine_default(self):
-        return create_engine(self.db_url, echo=False)
+        engine_settings = {
+            'pool_recycle': 3600,
+        }
+        return create_engine(self.db_url, echo=False, **engine_settings)
 
     def __init__(self, *args, **kwargs):
         super(PostgresManagerMixin, self).__init__(*args, **kwargs)
