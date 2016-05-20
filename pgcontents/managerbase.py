@@ -42,7 +42,7 @@ class PostgresManagerMixin(HasTraits):
 
     def _engine_default(self):
         engine_settings = {
-            'pool_recycle': 3600,
+            'pool_recycle': 300,
         }
         return create_engine(self.db_url, **engine_settings)
 
