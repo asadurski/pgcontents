@@ -34,7 +34,6 @@ def is_unique_violation(error):
 
 
 def is_foreign_key_violation(error):
-    import ipdb; ipdb.set_trace()
     return False
     # return error.orig.pgcode == FOREIGN_KEY_VIOLATION
 
