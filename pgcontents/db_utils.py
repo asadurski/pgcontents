@@ -33,9 +33,13 @@ def is_unique_violation(error):
     return error.orig.args[0] == 1062
 
 
+# MySQL ER_ROW_IS_REFERENCED_2
+# See http://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
+MYSQL_FOREIGN_KEY_VIOLATION_ERRNO = 1451
+
 def is_foreign_key_violation(error):
-    return False
     # return error.orig.pgcode == FOREIGN_KEY_VIOLATION
+    return error.orig.errno == MYSQL_FOREIGN_KEY_VIOLATION_ERRNO
 
 
 @contextmanager
