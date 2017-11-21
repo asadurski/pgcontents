@@ -78,7 +78,12 @@ class PostgresContentsManager(PostgresManagerMixin, ContentsManager):
         return PostgresCheckpoints
 
     def _checkpoints_kwargs_default(self):
-        kw = super(PostgresContentsManager, self)._checkpoints_kwargs_default()
+        if hasattr(ContentsManager, '_default_checkpoints_kwargs'):
+            # for newer version of notebook
+            kw = super(PostgresContentsManager, self)._default_checkpoints_kwargs()
+        else:
+            # for older version of notebook
+            kw = super(PostgresContentsManager, self)._checkpoints_kwargs_default()
         kw.update(
             {
                 'db_url': self.db_url,
